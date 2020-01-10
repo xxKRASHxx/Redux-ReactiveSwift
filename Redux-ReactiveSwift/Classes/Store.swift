@@ -44,7 +44,7 @@ open class Store<State, Event> {
   private func consume(event: Event, with middlewares: [StoreMiddleware]) {
     guard middlewares.count > 0 else { return undecoratedConsume(event: event) }
     let slicedMiddlewares = Array(middlewares.dropFirst())
-    if let signal = middlewares.first?.consume(event: event)?.take(first: 1) {
+    if let signal = middlewares.first?.consume(event: event) {
       signal.startWithValues { [weak self] value in self?.consume(event: value, with: slicedMiddlewares) }
     } else {
       self.consume(event: event, with: slicedMiddlewares)

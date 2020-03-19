@@ -22,9 +22,11 @@ open class Store<State, Event> {
   fileprivate var innerProperty: MutableProperty<State>
   fileprivate var reducers: [Reducer]
   fileprivate var middlewares: [StoreMiddleware] = []
+  fileprivate let readScheduler: QueueScheduler
   
-  public required init(state: State, reducers: [Reducer]) {
+  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler? = nil) {
     self.innerProperty = MutableProperty<State>(state)
+    self.readScheduler = readScheduler ?? .main
     self.reducers = reducers
   }
   
@@ -68,19 +70,19 @@ open class Store<State, Event> {
 
 extension Store: PropertyProtocol {
   public var value: State {
-    return innerProperty.value
+    readScheduler.queue.sync { innerProperty.value }
   }
   public var producer: SignalProducer<State, Never> {
-    return innerProperty.producer
+    innerProperty.producer.start(on: readScheduler)
   }
   public var signal: Signal<State, Never> {
-    return innerProperty.signal
+    innerProperty.signal.observe(on: readScheduler)
   }
 }
 
 public extension Store {
   @discardableResult
-  public static func <~ <Source: BindingSource> (target: Store<State, Event>, source: Source) -> Disposable?
+  static func <~ <Source: BindingSource> (target: Store<State, Event>, source: Source) -> Disposable?
     where Event == Source.Value
   {
     return source.producer
@@ -90,7 +92,10 @@ public extension Store {
 }
 
 public extension Store where State: Defaultable {
-  convenience init(reducers: [Reducer]) {
-    self.init(state: State.defaultValue, reducers: reducers)
+  convenience init(reducers: [Reducer], readScheduler: QueueScheduler? = nil) {
+    self.init(
+      state: State.defaultValue,
+      reducers: reducers,
+      readScheduler: readScheduler)
   }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		023BC7D2C86D2C51DA5B6A3F /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29196EB9593C0E834768F018 /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework */; };
+		0E526671241A9D0300923B83 /* SyncSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E526670241A9D0300923B83 /* SyncSpec.swift */; };
 		12647EBE419B7D423332663F /* Pods_CocoaPods_Redux_ReactiveSwift_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2E76FEE2C25B4A7C5774A40 /* Pods_CocoaPods_Redux_ReactiveSwift_iOSTests.framework */; };
 		4BBF000A1FFAE2D800FA8377 /* StoreBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */; };
 		4BC6AFDA1FFA9F050057EA7F /* JSONFilePersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC6AFD91FFA9F050057EA7F /* JSONFilePersister.swift */; };
@@ -61,6 +62,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E526670241A9D0300923B83 /* SyncSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSpec.swift; sourceTree = "<group>"; };
 		212D07EA9483A91EF4D13885 /* Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaPods-Redux-ReactiveSwift-tvOS/Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		29196EB9593C0E834768F018 /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		385806C8F60FEB4ED4845D9C /* Pods-CocoaPods-Redux-ReactiveSwift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaPods-Redux-ReactiveSwift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaPods-Redux-ReactiveSwift-iOS/Pods-CocoaPods-Redux-ReactiveSwift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 			children = (
 				4BD3B39C1F9695B80077E8A5 /* CallSpy.swift */,
 				4BD3B39E1F9695B80077E8A5 /* StoreSpec.swift */,
+				0E526670241A9D0300923B83 /* SyncSpec.swift */,
 				4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */,
 			);
 			path = Tests;
@@ -756,6 +759,7 @@
 			files = (
 				4BD3B39F1F9695BF0077E8A5 /* CallSpy.swift in Sources */,
 				4BD3B3A01F9695C20077E8A5 /* StoreSpec.swift in Sources */,
+				0E526671241A9D0300923B83 /* SyncSpec.swift in Sources */,
 				4BBF000A1FFAE2D800FA8377 /* StoreBuilderSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

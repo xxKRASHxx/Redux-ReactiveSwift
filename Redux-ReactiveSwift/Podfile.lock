@@ -12,7 +12,7 @@ DEPENDENCIES:
   - ReactiveSwift (~> 6.0)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Nimble
     - Quick
     - ReactiveCocoa
@@ -26,4 +26,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0d5034dafae52f6999c611fe41d4f7d5c887f80d
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.9.1

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		023BC7D2C86D2C51DA5B6A3F /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29196EB9593C0E834768F018 /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework */; };
+		0E4E6F80242509C10080EA53 /* Queue+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E6F7F242509C10080EA53 /* Queue+Sync.swift */; };
 		0E526671241A9D0300923B83 /* SyncSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E526670241A9D0300923B83 /* SyncSpec.swift */; };
 		12647EBE419B7D423332663F /* Pods_CocoaPods_Redux_ReactiveSwift_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2E76FEE2C25B4A7C5774A40 /* Pods_CocoaPods_Redux_ReactiveSwift_iOSTests.framework */; };
 		4BBF000A1FFAE2D800FA8377 /* StoreBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E4E6F7F242509C10080EA53 /* Queue+Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Queue+Sync.swift"; sourceTree = "<group>"; };
 		0E526670241A9D0300923B83 /* SyncSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSpec.swift; sourceTree = "<group>"; };
 		212D07EA9483A91EF4D13885 /* Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaPods-Redux-ReactiveSwift-tvOS/Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		29196EB9593C0E834768F018 /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -256,6 +258,7 @@
 				4BD82C9D1FFA8A1B007055E5 /* Persister.swift */,
 				4BC6AFD91FFA9F050057EA7F /* JSONFilePersister.swift */,
 				4BC6AFE21FFAB8AA0057EA7F /* StoreBuilder.swift */,
+				0E4E6F7F242509C10080EA53 /* Queue+Sync.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -701,6 +704,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E4E6F80242509C10080EA53 /* Queue+Sync.swift in Sources */,
 				4BD82C9E1FFA8A1B007055E5 /* Persister.swift in Sources */,
 				4BC6AFE31FFAB8AA0057EA7F /* StoreBuilder.swift in Sources */,
 				4BD3B3961F96959A0077E8A5 /* Store.swift in Sources */,

@@ -28,6 +28,7 @@ open class Store<State, Event> {
     self.innerProperty = MutableProperty<State>(state)
     self.readScheduler = readScheduler ?? .main
     self.reducers = reducers
+    readScheduler?.queue.recursiveSyncEnabled = true
   }
   
   public func applyMiddlewares(_ middlewares: [StoreMiddleware]) -> Self {
@@ -54,7 +55,7 @@ open class Store<State, Event> {
   }
   
   public func undecoratedConsume(event: Event) {
-    self.innerProperty.value = reducers.reduce(self.innerProperty.value) { $1($0, event) }
+    innerProperty.value = reducers.reduce(self.innerProperty.value) { $1($0, event) }
   }
   
   private func register(middleware: StoreMiddleware) {
@@ -63,6 +64,7 @@ open class Store<State, Event> {
       guard let safeValue = value as? State else {
         fatalError("Store got \(value) from unsafeValue() signal which is not of \(String(describing:State.self)) type")
       }
+      
       self?.innerProperty.value = safeValue
     }
   }
@@ -70,11 +72,17 @@ open class Store<State, Event> {
 
 extension Store: PropertyProtocol {
   public var value: State {
-    readScheduler.queue.sync { innerProperty.value }
+    readScheduler.queue.recursiveSync { innerProperty.value }
   }
+  
   public var producer: SignalProducer<State, Never> {
-    innerProperty.producer.start(on: readScheduler)
+    SignalProducer<State, Never> { [weak self] observer, lifetime in
+      guard let self = self else { return observer.sendCompleted() }
+      observer.send(value: self.value)
+      lifetime += self.signal.observe(observer)
+    }
   }
+  
   public var signal: Signal<State, Never> {
     innerProperty.signal.observe(on: readScheduler)
   }

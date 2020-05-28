@@ -39,18 +39,18 @@ class StoreSpec: QuickSpec {
                 }
                 it("should fire signal on event") {
                     let (store, _) = createStore(reducer: intReducer, initialValue: 0)
-                    let observer = observeValues(of: store, with: observeValues)
+                    let observer = observeValues(of: store, with: observeIntValues)
                     store.consume(event: .increment)
-                    expect(observer.callCount).to(equal(1))
+                    expect(observer.callCount).toEventually(equal(1), timeout: 0.1)
                 }
                 it("should fire signal on each event") {
                     let (store, _) = createStore(reducer: intReducer, initialValue: 0)
-                    let observer = observeValues(of: store, with: observeValues)
+                    let observer = observeValues(of: store, with: observeIntValues)
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
                     store.consume(event: .subtract(1))
-                    expect(observer.callCount).to(equal(4))
+                    expect(observer.callCount).toEventually(equal(4), timeout: 0.1)
                 }
             }
             context("multiple reducers") {
@@ -71,18 +71,18 @@ class StoreSpec: QuickSpec {
                 }
                 it("should fire signal on event") {
                     let store = createStore(reducers: [intReducer, intReducer, intReducer], initialValue: 0)
-                    let observer = observeValues(of: store, with: observeValues)
+                    let observer = observeValues(of: store, with: observeIntValues)
                     store.consume(event: .increment)
-                    expect(observer.callCount).to(equal(1))
+                    expect(observer.callCount).toEventually(equal(1), timeout: 0.1)
                 }
                 it("should fire signal on each event") {
                     let store = createStore(reducers: [intReducer, intReducer, intReducer], initialValue: 0)
-                    let observer = observeValues(of: store, with: observeValues)
+                    let observer = observeValues(of: store, with: observeIntValues)
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
                     store.consume(event: .subtract(1))
-                    expect(observer.callCount).to(equal(4))
+                    expect(observer.callCount).toEventually(equal(4), timeout: 0.1)
                 }
             }
         }
@@ -129,15 +129,15 @@ class StoreSpec: QuickSpec {
             context("signal producer") {
                 it("should produce valid sequence of values") {
                     let (store, _) = createStore(reducer: intReducer, initialValue: 0)
-                    let observer = observeValuesViaProducer(of: store, with: observeValues)
+                    let observer = observeValuesViaProducer(of: store, with: observeIntValues)
 
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
                     store.consume(event: .subtract(1))
 
-                    let a = observer.arrayForAllCallsForArgument(at: 0)
-                    expect((a as! [Int])).to(equal([0, 1, 0, 1, 0]))
+                    expect((observer.arrayForAllCallsForArgument(at: 0) as! [Int]))
+                        .toEventually(equal([0, 1, 0, 1, 0]), timeout: 0.1)
                 }
             }
         }
@@ -194,10 +194,8 @@ class StoreSpec: QuickSpec {
                     store.consume(event: .add(1))
                     store.consume(event: .subtract(1))
 
-                    let a = observer.arrayForAllCallsForArgument(at: 0)
-                    let expectedValues = [0, 1, 0, 1, 0].map { $0 as NSNumber }
-                    expect((a as! [NSNumber])).to(equal([0, 1, 0, 1, 0]))
-
+                    expect((observer.arrayForAllCallsForArgument(at: 0) as! [NSNumber]))
+                        .toEventually(equal([0, 1, 0, 1, 0]), timeout: 0.1)
                 }
             }
         }
@@ -211,25 +209,33 @@ class StoreSpec: QuickSpec {
             context("signal producer") {
                 it("should initialize with default value") {
                     let store: Store<Int, ()> = Store(reducers: [])
-                    let observer = observeValuesViaProducer(of: store, with: observeValues)
+                    let observer = observeValuesViaProducer(of: store, with: observeIntValues)
                     expect((observer.arguments()[0] as! Int)).to(equal(Int.defaultValue))
                 }
             }
         }
         describe("Value binding") {
             it("should deliver values to binding target") {
+                let f: ([String]) -> () = { _ in }
+                let callSpy = CallSpy.makeCallSpy(f1: f)
+
                 let label = UILabel()
+                label.reactive.producer(forKeyPath: "text")
+                    .skipNil()
+                    .map { $0 as! String }
+                    .collect(count: 5)
+                    .startWithValues(callSpy.1)
+
                 let store = createStore(reducers: [stringReducer], initialValue: "Hello")
                 label.reactive.text <~ store
-                expect(label.text).to(equal("Hello"))
                 store.consume(event: .increment)
-                expect(label.text).to(equal("Hello1"))
                 store.consume(event: .decrement)
-                expect(label.text).to(equal("Hello"))
                 store.consume(event: .add(4))
-                expect(label.text).to(equal("Hello1234"))
                 store.consume(event: .subtract(5))
-                expect(label.text).to(equal("Hell"))
+
+                expect((callSpy.0.arguments()[0] as! [String]))
+                    .toEventually(equal(["Hello", "Hello1", "Hello", "Hello1234", "Hell"]), timeout: 0.1)
+                
             }
             it("should accept values from the binding source") {
                 let searchBar = UISearchBar()
@@ -327,5 +333,5 @@ private func stringReducer(state: String, event: IntegerArithmeticAction) -> Str
     case .subtract(let operand): return String(state.dropLast(operand));
     }
 }
-private func observeValues(values: Int) {}
+private func observeIntValues(values: Int) {}
 private func observeNumberValues(values: NSNumber) {}

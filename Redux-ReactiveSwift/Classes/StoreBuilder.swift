@@ -13,7 +13,7 @@ open class StoreBuilder<StateType, EventType, StoreType: Store<StateType, EventT
     fileprivate var initialState: StateType
     fileprivate var reducers: [StoreType.Reducer] = []
     fileprivate var middlewares: [StoreMiddleware] = []
-    fileprivate var readScheduler: QueueScheduler?
+    fileprivate var readScheduler: QueueScheduler = .main
     
     public init(state: StateType) {
         initialState = state

@@ -24,11 +24,12 @@ open class Store<State, Event> {
   fileprivate var middlewares: [StoreMiddleware] = []
   fileprivate let readScheduler: QueueScheduler
   
-  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler? = nil) {
+  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler = .main) {
+    readScheduler.queue.recursiveSyncEnabled = true
+    
     self.innerProperty = MutableProperty<State>(state)
-    self.readScheduler = readScheduler ?? .main
+    self.readScheduler = readScheduler
     self.reducers = reducers
-    readScheduler?.queue.recursiveSyncEnabled = true
   }
   
   public func applyMiddlewares(_ middlewares: [StoreMiddleware]) -> Self {
@@ -100,7 +101,7 @@ public extension Store {
 }
 
 public extension Store where State: Defaultable {
-  convenience init(reducers: [Reducer], readScheduler: QueueScheduler? = nil) {
+    convenience init(reducers: [Reducer], readScheduler: QueueScheduler = .main) {
     self.init(
       state: State.defaultValue,
       reducers: reducers,

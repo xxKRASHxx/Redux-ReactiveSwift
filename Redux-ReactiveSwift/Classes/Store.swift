@@ -28,9 +28,7 @@ open class Store<State, Event> {
   fileprivate var _producer: SignalProducer<State, Never> = .empty
   fileprivate var _signal: Signal<State, Never> = .empty
   
-  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler = .main) {
-    readScheduler.queue.recursiveSyncEnabled = true
-    
+  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler = .main) {    
     self.innerProperty = MutableProperty<State>(state)
     self.readScheduler = readScheduler
     self.reducers = reducers

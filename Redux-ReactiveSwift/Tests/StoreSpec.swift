@@ -92,17 +92,20 @@ class StoreSpec: QuickSpec {
                     it("should calculate value by reducer") {
                         let (store, _) = createStore(reducer: intReducer, initialValue: 0)
                         store.consume(event: .increment)
-                        expect(store.value).to(equal(intReducer(state: 0, event: .increment)))
+                        expect(store.value)
+                            .toEventually(equal(intReducer(state: 0, event: .increment)), timeout: 0.1)
                     }
                     it("should calculate values by reducer on each event") {
 
                         let (store, _) = createStore(reducer: intReducer, initialValue: 0)
                         store.consume(event: .increment)
-                        expect(store.value).to(equal(intReducer(state: 0, event: .increment)))
+                        expect(store.value)
+                            .toEventually(equal(intReducer(state: 0, event: .increment)), timeout: 0.1)
 
                         let state = store.value
                         store.consume(event: .decrement)
-                        expect(store.value).to(equal(intReducer(state: state, event: .decrement)))
+                        expect(store.value)
+                            .toEventually(equal(intReducer(state: state, event: .decrement)), timeout: 0.1)
                     }
                 }
                 context("multiple reducers") {
@@ -111,18 +114,21 @@ class StoreSpec: QuickSpec {
                         let store = createStore(reducers: reducers, initialValue: 0)
                         store.consume(event: .increment)
                         let result = reducers.reduce(0, { state, reducer in reducer(state, .increment) })
-                        expect(store.value).to(equal(result))
+                        expect(store.value)
+                            .toEventually(equal(result), timeout: 0.1)
                     }
                     it("should calculate values by reducer on each event") {
                         let store = createStore(reducers: reducers, initialValue: 0)
                         store.consume(event: .increment)
                         let result = reducers.reduce(0, { state, reducer in reducer(state, .increment) })
-                        expect(store.value).to(equal(result))
+                        expect(store.value)
+                            .toEventually(equal(result), timeout: 0.1)
 
                         let state = store.value
                         store.consume(event: .decrement)
                         let nextResult = reducers.reduce(state, { state, reducer in reducer(state, .decrement) })
-                        expect(store.value).to(equal(nextResult))
+                        expect(store.value)
+                            .toEventually(equal(nextResult), timeout: 0.1)
                     }
                 }
             }
@@ -148,16 +154,19 @@ class StoreSpec: QuickSpec {
                     it("should calculate value by reducer") {
                         let (store, _) = createStore(reducer: nsNumberReducer, initialValue: initialState)
                         store.consume(event: .increment)
-                        expect(store.value).to(equal(nsNumberReducer(state: initialState, event: .increment)))
+                        expect(store.value)
+                            .toEventually(equal(nsNumberReducer(state: initialState, event: .increment)), timeout: 0.1)
                     }
                     it("should calculate values by reducer on each event") {
                         let (store, _) = createStore(reducer: nsNumberReducer, initialValue: initialState)
                         store.consume(event: .increment)
-                        expect(store.value).to(equal(nsNumberReducer(state: initialState, event: .increment)))
+                        expect(store.value)
+                            .toEventually(equal(nsNumberReducer(state: initialState, event: .increment)), timeout: 0.1)
 
                         let state = store.value
                         store.consume(event: .decrement)
-                        expect(store.value).to(equal(nsNumberReducer(state: state, event: .decrement)))
+                        expect(store.value)
+                            .toEventually(equal(nsNumberReducer(state: state, event: .decrement)), timeout: 0.1)
 
                     }
                 }
@@ -167,19 +176,22 @@ class StoreSpec: QuickSpec {
                         let store = createStore(reducers: reducers, initialValue: initialState)
                         store.consume(event: .increment)
                         let result = reducers.reduce(initialState, { state, reducer in reducer(state, .increment) })
-                        expect(store.value).to(equal(result))
+                        expect(store.value)
+                            .toEventually(equal(result), timeout: 0.1)
                     }
 
                     it("should calculate values by reducer on each event") {
                         let store = createStore(reducers: reducers, initialValue: initialState)
                         store.consume(event: .increment)
                         let result = reducers.reduce(initialState, { state, reducer in reducer(state, .increment) })
-                        expect(store.value).to(equal(result))
+                        expect(store.value)
+                            .toEventually(equal(result), timeout: 0.1)
 
                         let state = store.value
                         store.consume(event: .decrement)
                         let nextResult = reducers.reduce(state, { state, reducer in reducer(state, .decrement) })
-                        expect(store.value).to(equal(nextResult))
+                        expect(store.value)
+                            .toEventually(equal(nextResult), timeout: 0.1)
                     }
                 }
             }
@@ -238,31 +250,43 @@ class StoreSpec: QuickSpec {
                 
             }
             it("should accept values from the binding source") {
+                let f: ([[String]]) -> () = { _ in }
+                let callSpy = CallSpy.makeCallSpy(f1: f)
+                
                 let searchBar = UISearchBar()
                 let searchSource = ["ReactiveCocoa", "ReactiveSwift", "Result", "Redux-ReactiveSwitft"]
                 func reducer(state: [String], event: String) -> [String] {
                     return event.count > 0 ? searchSource.filter { $0.lowercased().starts(with: event.lowercased()) } : searchSource
                 }
+                
                 let store = Store<[String], String>(state: [], reducers: [reducer])
                 store <~ searchBar.reactive.continuousTextValues.skipNil()
+                store.producer.collect(count: 7)
+                    .startWithValues(callSpy.1)
+                
                 searchBar.text = "Re"
                 searchBar.delegate?.searchBar?(searchBar, textDidChange: "Re")
-                expect(store.value).to(equal(searchSource))
                 searchBar.text = "Rea"
                 searchBar.delegate?.searchBar?(searchBar, textDidChange: "Rea")
-                expect(store.value).to(equal(["ReactiveCocoa", "ReactiveSwift"]))
                 searchBar.text = "ReS"
                 searchBar.delegate?.searchBar?(searchBar, textDidChange: "ReS")
-                expect(store.value).to(equal(["Result"]))
                 searchBar.text = "Red"
                 searchBar.delegate?.searchBar?(searchBar, textDidChange: "Red")
-                expect(store.value).to(equal(["Redux-ReactiveSwitft"]))
                 searchBar.text = "RA"
                 searchBar.delegate?.searchBar?(searchBar, textDidChange: "RA")
-                expect(store.value).to(equal([]))
                 searchBar.text = ""
                 searchBar.delegate?.searchBar?(searchBar, textDidChange: "")
-                expect(store.value).to(equal(searchSource))
+                
+                expect((callSpy.0.arguments()[0] as! [[String]]))
+                    .toEventually(equal([
+                        [],
+                        searchSource,
+                        ["ReactiveCocoa", "ReactiveSwift"],
+                        ["Result"],
+                        ["Redux-ReactiveSwitft"],
+                        [],
+                        searchSource
+                    ]), timeout: 0.1)
             }
         }
     }

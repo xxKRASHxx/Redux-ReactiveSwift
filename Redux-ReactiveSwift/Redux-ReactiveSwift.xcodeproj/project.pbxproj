@@ -64,7 +64,7 @@
 
 /* Begin PBXFileReference section */
 		0E4E6F7F242509C10080EA53 /* Queue+Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Queue+Sync.swift"; sourceTree = "<group>"; };
-		0E526670241A9D0300923B83 /* SyncSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSpec.swift; sourceTree = "<group>"; };
+		0E526670241A9D0300923B83 /* SyncSpec.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SyncSpec.swift; sourceTree = "<group>"; tabWidth = 2; };
 		212D07EA9483A91EF4D13885 /* Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaPods-Redux-ReactiveSwift-tvOS/Pods-CocoaPods-Redux-ReactiveSwift-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		29196EB9593C0E834768F018 /* Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoaPods_Redux_ReactiveSwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		385806C8F60FEB4ED4845D9C /* Pods-CocoaPods-Redux-ReactiveSwift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaPods-Redux-ReactiveSwift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaPods-Redux-ReactiveSwift-iOS/Pods-CocoaPods-Redux-ReactiveSwift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 		4BD3B37F1F9692AA0077E8A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BD3B3881F9694900077E8A5 /* CocoaPods-Redux-ReactiveSwift-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CocoaPods-Redux-ReactiveSwift-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BD3B38C1F9694900077E8A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4BD3B3951F96958D0077E8A5 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		4BD3B3951F96958D0077E8A5 /* Store.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4BD3B39C1F9695B80077E8A5 /* CallSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallSpy.swift; sourceTree = "<group>"; };
 		4BD3B39E1F9695B80077E8A5 /* StoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSpec.swift; sourceTree = "<group>"; };
 		4BD3B3AA1F969BBF0077E8A5 /* Carthage_Redux_ReactiveSwift_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Carthage_Redux_ReactiveSwift_iOS.h; sourceTree = "<group>"; };

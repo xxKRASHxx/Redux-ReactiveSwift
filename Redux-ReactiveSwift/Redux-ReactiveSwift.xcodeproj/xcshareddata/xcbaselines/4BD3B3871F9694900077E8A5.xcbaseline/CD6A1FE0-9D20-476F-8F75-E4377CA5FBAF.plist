@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>ConstantTime</key>
+		<dict>
+			<key>testOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_RunTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.025457</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_SystemTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.0051375</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TotalHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>985.09</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_UserTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.020319</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.013123</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>LinearLogarithmicTime</key>
+		<dict>
+			<key>testOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_RunTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.95525</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_SystemTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.063694</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TotalHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.4241e+06</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_UserTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.89156</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.78339</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>LinearTime</key>
+		<dict>
+			<key>testOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_RunTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.029692</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_SystemTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.005872</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TotalHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>5063.1</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_UserTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.02382</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.015626</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:09:55 PM</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>PerformanceTest</key>
+		<dict>
+			<key>testConstantTimeOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_HighWaterMarkForHeapAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>38.283</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_HighWaterMarkForVMAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentHeapAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentHeapAllocationsNodes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>198.4</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentVMAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_RunTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.02698</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_SystemTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.0056581</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TemporaryHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1181.4</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TotalHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>985.07</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1181.4</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientHeapAllocationsNodes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>31301</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientVMAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_UserTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.021322</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.013906</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+			</dict>
+			<key>testLinearLogarithmicTimeOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_HighWaterMarkForHeapAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>957.87</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_HighWaterMarkForVMAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>4915.2</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentHeapAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentHeapAllocationsNodes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1510.9</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentVMAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>4915.2</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_RunTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.95123</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_SystemTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.062847</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TemporaryHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.532e+06</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TotalHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.4241e+06</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.532e+06</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientHeapAllocationsNodes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.0358e+06</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientVMAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_UserTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.88838</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.78194</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+			</dict>
+			<key>testLinearTimeOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_HighWaterMarkForHeapAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>38.491</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_HighWaterMarkForVMAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1638.4</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentHeapAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentHeapAllocationsNodes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>196.9</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_PersistentVMAllocations</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1638.4</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_RunTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.029143</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_SystemTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.0058329</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TemporaryHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>5477.7</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TotalHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>5061.4</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>5477.7</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientHeapAllocationsNodes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>33304</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_TransientVMAllocationsKilobytes</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:02:46 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_UserTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.02331</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.015201</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>May 29, 2020 at 2:06:21 PM</string>
+				</dict>
+			</dict>
+			<key>testOneToOnePerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.13748</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+				</dict>
+			</dict>
+			<key>testPerformanceExample()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>4.6549e-05</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -8,10 +8,11 @@
 import Foundation
 import ReactiveSwift
 
+public typealias Reducer<State, Event> = (State, Event) -> State
+
 public protocol StoreProtocol {
     associatedtype State
     associatedtype Event
-    associatedtype Reducer
     
     func applyMiddlewares(_ middlewares: [StoreMiddleware]) -> Self
     func consume(event: Event)
@@ -19,7 +20,7 @@ public protocol StoreProtocol {
     
     var lifetime: Lifetime { get }
     
-    init(state: State, reducers: [Reducer], readScheduler: QueueScheduler)
+    init(state: State, reducers: [Reducer<State, Event>], readScheduler: QueueScheduler)
 }
 
 

@@ -25,12 +25,9 @@ fileprivate extension DispatchQueue {
     }
 }
 
-public final class StrongConsistencyStore<State, Event>: StoreProtocol {
-
-  public typealias Reducer = (State, Event) -> State
-
+open class StrongConsistencyStore<State, Event>: StoreProtocol {
   fileprivate var innerProperty: MutableProperty<State>
-  fileprivate var reducers: [Reducer]
+  fileprivate var reducers: [Reducer<State, Event>]
   fileprivate var middlewares: [StoreMiddleware] = []
   fileprivate let readScheduler: QueueScheduler
     
@@ -38,7 +35,7 @@ public final class StrongConsistencyStore<State, Event>: StoreProtocol {
     return innerProperty.lifetime
   }
 
-  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler = .main) {
+  public required init(state: State, reducers: [Reducer<State, Event>], readScheduler: QueueScheduler = .main) {
     readScheduler.queue.recursiveSyncEnabled = true
     
     self.innerProperty = MutableProperty<State>(state)
@@ -104,7 +101,7 @@ extension StrongConsistencyStore: PropertyProtocol {
 }
 
 public extension StrongConsistencyStore where State: Defaultable {
-  convenience init(reducers: [Reducer], readScheduler: QueueScheduler = .main) {
+  convenience init(reducers: [Reducer<State, Event>], readScheduler: QueueScheduler = .main) {
     self.init(
       state: State.defaultValue,
       reducers: reducers,

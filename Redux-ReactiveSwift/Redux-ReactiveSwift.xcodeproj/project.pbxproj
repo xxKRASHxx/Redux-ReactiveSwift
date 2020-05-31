@@ -188,6 +188,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B33DA6824840E1F00EBA2A6 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				4B33DA592483CE7C00EBA2A6 /* StoreProtocol.swift */,
+				4BC6AFE21FFAB8AA0057EA7F /* StoreBuilder.swift */,
+				4BD3B3951F96958D0077E8A5 /* Store.swift */,
+				4B33DA5B2483ED7800EBA2A6 /* StrongConsistencyStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		4B33DA6924840E4100EBA2A6 /* Middlewares */ = {
+			isa = PBXGroup;
+			children = (
+				4BD82C821FFA4291007055E5 /* StoreMiddleware.swift */,
+				4BD82C8B1FFA779B007055E5 /* Dispatcher.swift */,
+				4BD82C941FFA7AED007055E5 /* Logger.swift */,
+				4BD82C9D1FFA8A1B007055E5 /* Persister.swift */,
+				4BC6AFD91FFA9F050057EA7F /* JSONFilePersister.swift */,
+			);
+			path = Middlewares;
+			sourceTree = "<group>";
+		};
 		4BD3B3481F9690810077E8A5 = {
 			isa = PBXGroup;
 			children = (
@@ -268,15 +291,8 @@
 		4BD3B3931F96958D0077E8A5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4BD3B3951F96958D0077E8A5 /* Store.swift */,
-				4B33DA5B2483ED7800EBA2A6 /* StrongConsistencyStore.swift */,
-				4BD82C821FFA4291007055E5 /* StoreMiddleware.swift */,
-				4BD82C8B1FFA779B007055E5 /* Dispatcher.swift */,
-				4BD82C941FFA7AED007055E5 /* Logger.swift */,
-				4BD82C9D1FFA8A1B007055E5 /* Persister.swift */,
-				4BC6AFD91FFA9F050057EA7F /* JSONFilePersister.swift */,
-				4BC6AFE21FFAB8AA0057EA7F /* StoreBuilder.swift */,
-				4B33DA592483CE7C00EBA2A6 /* StoreProtocol.swift */,
+				4B33DA6824840E1F00EBA2A6 /* Store */,
+				4B33DA6924840E4100EBA2A6 /* Middlewares */,
 				4B33DA5D2483EDC500EBA2A6 /* Defaultable.swift */,
 			);
 			path = Classes;

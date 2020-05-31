@@ -290,6 +290,7 @@ class ConstantTimeStrongConsistency: ConstantTime, StoreProviderProtocol {
     }
 }
 
+// MARK: - Concrete test class for eventual consistency store linear time
 class LinearTimeEventualConsistency: LinearTime, StoreProviderProtocol {
     var store: Store<[Int], Int> {
         StoreBuilder<[Int], Int, Store<[Int], Int>>(state: [])
@@ -309,6 +310,7 @@ class LinearTimeEventualConsistency: LinearTime, StoreProviderProtocol {
     }
 }
 
+// MARK: - Concrete test class for strong consistency store linear time
 class LinearTimeStrongConsistency: LinearTime, StoreProviderProtocol {
     var store: StrongConsistencyStore<[Int], Int> {
         StoreBuilder<[Int], Int, StrongConsistencyStore<[Int], Int>>(state: [])
@@ -328,6 +330,7 @@ class LinearTimeStrongConsistency: LinearTime, StoreProviderProtocol {
     }
 }
 
+// MARK: - Concrete test class for eventual consistency store quadratic time
 class QuadraticTimeEventualConsistency: QuadraticTime, StoreProviderProtocol {
     var store: Store<State, Int> {
         StoreBuilder<State, Int, Store<State, Int>>()
@@ -347,6 +350,7 @@ class QuadraticTimeEventualConsistency: QuadraticTime, StoreProviderProtocol {
     }
 }
 
+// MARK: - Concrete test class for strong consistency store quadratic time
 class QuadraticTimeStrongConsistency: QuadraticTime, StoreProviderProtocol {
     var store: StrongConsistencyStore<State, Int> {
         StoreBuilder<State, Int, StrongConsistencyStore<State, Int>>()

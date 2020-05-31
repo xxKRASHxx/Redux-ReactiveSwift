@@ -11,13 +11,15 @@ import ReactiveSwift
 public protocol StoreProtocol {
     associatedtype State
     associatedtype Event
-    typealias Reducer = (State, Event) -> State
+    associatedtype Reducer
     
     func applyMiddlewares(_ middlewares: [StoreMiddleware]) -> Self
     func consume(event: Event)
     func undecoratedConsume(event: Event)
     
     var lifetime: Lifetime { get }
+    
+    init(state: State, reducers: [Reducer], readScheduler: QueueScheduler)
 }
 
 

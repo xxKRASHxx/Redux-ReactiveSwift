@@ -12,6 +12,7 @@ import ReactiveSwift
 import Redux_ReactiveSwift
 import UIKit
 
+// MARK: - Auxiliary types for this performance test
 fileprivate class Const {
     static let timeout: TimeInterval = 5
     static let writeCount: Int = 1000
@@ -23,6 +24,13 @@ fileprivate class Const {
     static let toManySum = Const.toManyMultiplicator * Const.writeSum
     static let toManyResultCount: Int = Const.toManyMultiplicator * Const.writeCount
 }
+
+fileprivate protocol StoreProviderProtocol {
+    associatedtype S: StoreProtocol
+    var store: S { get }
+}
+
+// MARK: - Base class to define measurement pattern and metrics
 
 class BasePerformanceTest: XCTestCase {
     var writeQueue: DispatchQueue { return .init(label: "com.queue.write", qos: .default) }
@@ -65,48 +73,16 @@ class BasePerformanceTest: XCTestCase {
     }
 }
 
-class ConstantTime: BasePerformanceTest {
-    lazy var setupClosure = { () -> Store<Int, Int> in
-        return StoreBuilder<Int, Int, Store<Int, Int>>()
-            .reducer({ $0 + $1 })
-            .scheduleRead(on: self.readScheduler)
-            .build()
-    }
-}
+// MARK: - Type definitions for three types of test: constant time growth state O(1), linear O(n) and quadratic O(n^2)
+class ConstantTime: BasePerformanceTest {}
+class LinearTime: BasePerformanceTest {}
+class QuadraticTime: BasePerformanceTest {}
 
-class LinearTime: BasePerformanceTest {
-    lazy var setupClosure = { () -> Store<[Int], Int> in
-        return StoreBuilder<[Int], Int, Store<[Int], Int>>(state: [])
-            .reducer({ $0 + [$1] })
-            .scheduleRead(on: self.readScheduler)
-            .build()
-    }
-}
-
-class LinearLogarithmicTime: BasePerformanceTest {
-    struct State {
-        let data: [StateSlice]; struct StateSlice {
-            let data: [Int]
-        }
-        static func reduce(state: State, action: Int) -> State {
-            return State(
-                data: [StateSlice(data: [action])] +
-                    state.data.map { StateSlice(data: $0.data + [action]) }
-            )
-        }
-    }
-    
-    lazy var setupClosure = { () -> Store<State, Int> in
-        return StoreBuilder<State, Int, Store<State, Int>>(state: State(data: []))
-            .reducer(State.reduce)
-            .scheduleRead(on: self.readScheduler)
-            .build()
-    }
-}
-
+// MARK: – Testing pattern for constant time. Can be applied to concrete store classes
 extension ConstantTime {
-    @objc func testOneToOnePerformance() {
-        testPerformance(setupClosure: self.setupClosure) { (store) in
+    func oneToOne<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == Int, S.Event == Int, S.Value == Int {
+        testPerformance(setupClosure: setupClosure) { (store) in
             let exp = self.expectation(description: "Wait for store to synchronize")
             store.producer.startWithValues { (value) in
                 if value == Const.writeSum {
@@ -121,8 +97,9 @@ extension ConstantTime {
         }
     }
     
-    @objc func testOneToManyPerformance() {
-        testPerformance(setupClosure: self.setupClosure) { (store) in
+    func oneToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == Int, S.Event == Int, S.Value == Int {
+        testPerformance(setupClosure: setupClosure) { (store) in
             for _ in 0 ..< Const.readMultiplicator {
                 let exp = self.expectation(description: "Wait for store to synchronize")
                 store.producer.startWithValues { (value) in
@@ -137,8 +114,9 @@ extension ConstantTime {
         }
     }
     
-    @objc func testManyToManyPerformance() {
-        testMultiplePerformance(setupClosure: { (0 ..< $0).map { _ in self.setupClosure() } }) { (stores) in
+    func manyToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == Int, S.Event == Int, S.Value == Int {
+        testMultiplePerformance(setupClosure: { (0 ..< $0).map { _ in setupClosure() } }) { (stores) in
             for _ in 0 ..< Const.toManyReadMultiplicator {
                 let exp = self.expectation(description: "Wait for store to synchronize")
                 SignalProducer.zip( stores.map { $0.producer }).startWithValues { (value) in
@@ -154,9 +132,11 @@ extension ConstantTime {
     }
 }
 
+// MARK: – Testing pattern for linear time. Can be applied to concrete store classes
 extension LinearTime {
-    @objc func testOneToOnePerformance() {
-        testPerformance(setupClosure: self.setupClosure) { (store) in
+    func oneToOne<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == [Int], S.Event == Int, S.Value == [Int] {
+        testPerformance(setupClosure: setupClosure) { (store) in
             let exp = self.expectation(description: "Wait for store to synchronize")
             store.producer.startWithValues { (value) in
                 if value.count == Const.writeCount { exp.fulfill() }
@@ -169,8 +149,9 @@ extension LinearTime {
         }
     }
     
-    @objc func testOneToManyPerformance() {
-        testPerformance(setupClosure: self.setupClosure) { (store) in
+    func oneToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == [Int], S.Event == Int, S.Value == [Int] {
+        testPerformance(setupClosure: setupClosure) { (store) in
             for _ in 0 ..< Const.readMultiplicator {
                 let exp = self.expectation(description: "Wait for store to synchronize")
                 store.producer.startWithValues { (value) in
@@ -185,8 +166,9 @@ extension LinearTime {
         }
     }
     
-    @objc func testManyToManyPerformance() {
-        testMultiplePerformance(setupClosure: { (0 ..< $0).map { _ in self.setupClosure() } }) { (stores) in
+    func manyToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == [Int], S.Event == Int, S.Value == [Int] {
+        testMultiplePerformance(setupClosure: { (0 ..< $0).map { _ in setupClosure() } }) { (stores) in
             for _ in 0 ..< Const.toManyReadMultiplicator {
                 let exp = self.expectation(description: "Wait for store to synchronize")
                 SignalProducer.zip( stores.map { $0.producer }).startWithValues { (value) in
@@ -203,9 +185,23 @@ extension LinearTime {
     }
 }
 
-extension LinearLogarithmicTime {
-    @objc func testOneToOnePerformance() {
-        testPerformance(setupClosure: self.setupClosure) { (store) in
+// MARK: – Testing pattern for quadratic time. Can be applied to concrete store classes
+extension QuadraticTime {
+    struct State: Defaultable {
+        let data: [StateSlice]; struct StateSlice {
+            let data: [Int]
+        }
+        static func reduce(state: State, action: Int) -> State {
+            return State(
+                data: [StateSlice(data: [action])] +
+                    state.data.map { StateSlice(data: $0.data + [action]) }
+            )
+        }
+        static var defaultValue: State = .init(data: [])
+    }
+    func oneToOne<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == State, S.Event == Int, S.Value == State {
+        testPerformance(setupClosure: setupClosure) { (store) in
             let exp = self.expectation(description: "Wait for store to synchronize")
             store.producer.startWithValues { (value) in
                 if value.data.count == Const.writeCount { exp.fulfill() }
@@ -218,8 +214,9 @@ extension LinearLogarithmicTime {
         }
     }
     
-    @objc func testOneToManyPerformance() {
-        testPerformance(setupClosure: self.setupClosure) { (store) in
+    func oneToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == State, S.Event == Int, S.Value == State {
+        testPerformance(setupClosure: setupClosure) { (store) in
             for _ in 0 ..< Const.readMultiplicator {
                 let exp = self.expectation(description: "Wait for store to synchronize")
                 store.producer.startWithValues { (value) in
@@ -234,8 +231,9 @@ extension LinearLogarithmicTime {
         }
     }
     
-    @objc func testManyToManyPerformance() {
-        testMultiplePerformance(timeout: 10, setupClosure: { (0 ..< $0).map { _ in self.setupClosure() } }) { (stores) in
+    func manyToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == State, S.Event == Int, S.Value == State {
+        testMultiplePerformance(timeout: 10, setupClosure: { (0 ..< $0).map { _ in setupClosure() } }) { (stores) in
             for _ in 0 ..< Const.toManyReadMultiplicator {
                 let exp = self.expectation(description: "Wait for store to synchronize")
                 SignalProducer.zip( stores.map { $0.producer }).startWithValues { (value) in
@@ -249,5 +247,121 @@ extension LinearLogarithmicTime {
                 }
             }
         }
+    }
+}
+
+// MARK: - Concrete test class for eventual consistency store constant time
+class ConstantTimeEventualConsistency: ConstantTime, StoreProviderProtocol {
+    var store: Store<Int, Int> {
+        StoreBuilder<Int, Int, Store<Int, Int>>()
+            .reducer({ $0 + $1 })
+            .scheduleRead(on: self.readScheduler)
+            .build()
+    }
+    lazy var setupClosure = { return self.store }
+    @objc func testOneToOnePerformance() {
+        self.oneToOne(self.setupClosure)
+    }
+    @objc func testOneToManyPerformance() {
+        self.oneToMany(self.setupClosure)
+    }
+    @objc func testManyToManyPerformance() {
+        self.manyToMany(self.setupClosure)
+    }
+}
+
+// MARK: - Concrete test class for strong consistency store constant time
+class ConstantTimeStrongConsistency: ConstantTime, StoreProviderProtocol {
+    var store: StrongConsistencyStore<Int, Int> {
+        StoreBuilder<Int, Int, StrongConsistencyStore<Int, Int>>()
+            .reducer({ $0 + $1 })
+            .scheduleRead(on: self.readScheduler)
+            .build()
+    }
+    lazy var setupClosure = { return self.store }
+    @objc func testOneToOnePerformance() {
+        self.oneToOne(self.setupClosure)
+    }
+    @objc func testOneToManyPerformance() {
+        self.oneToMany(self.setupClosure)
+    }
+    @objc func testManyToManyPerformance() {
+        self.manyToMany(self.setupClosure)
+    }
+}
+
+class LinearTimeEventualConsistency: LinearTime, StoreProviderProtocol {
+    var store: Store<[Int], Int> {
+        StoreBuilder<[Int], Int, Store<[Int], Int>>(state: [])
+            .reducer({ $0 + [$1] })
+            .scheduleRead(on: self.readScheduler)
+            .build()
+    }
+    lazy var setupClosure = { return self.store }
+    @objc func testOneToOnePerformance() {
+        self.oneToOne(self.setupClosure)
+    }
+    @objc func testOneToManyPerformance() {
+        self.oneToMany(self.setupClosure)
+    }
+    @objc func testManyToManyPerformance() {
+        self.manyToMany(self.setupClosure)
+    }
+}
+
+class LinearTimeStrongConsistency: LinearTime, StoreProviderProtocol {
+    var store: StrongConsistencyStore<[Int], Int> {
+        StoreBuilder<[Int], Int, StrongConsistencyStore<[Int], Int>>(state: [])
+            .reducer({ $0 + [$1] })
+            .scheduleRead(on: self.readScheduler)
+            .build()
+    }
+    lazy var setupClosure = { return self.store }
+    @objc func testOneToOnePerformance() {
+        self.oneToOne(self.setupClosure)
+    }
+    @objc func testOneToManyPerformance() {
+        self.oneToMany(self.setupClosure)
+    }
+    @objc func testManyToManyPerformance() {
+        self.manyToMany(self.setupClosure)
+    }
+}
+
+class QuadraticTimeEventualConsistency: QuadraticTime, StoreProviderProtocol {
+    var store: Store<State, Int> {
+        StoreBuilder<State, Int, Store<State, Int>>()
+            .reducer(State.reduce)
+            .scheduleRead(on: self.readScheduler)
+            .build()
+    }
+    lazy var setupClosure = { return self.store }
+    @objc func testOneToOnePerformance() {
+        self.oneToOne(self.setupClosure)
+    }
+    @objc func testOneToManyPerformance() {
+        self.oneToMany(self.setupClosure)
+    }
+    @objc func testManyToManyPerformance() {
+        self.manyToMany(self.setupClosure)
+    }
+}
+
+class QuadraticTimeStrongConsistency: QuadraticTime, StoreProviderProtocol {
+    var store: StrongConsistencyStore<State, Int> {
+        StoreBuilder<State, Int, StrongConsistencyStore<State, Int>>()
+            .reducer(State.reduce)
+            .scheduleRead(on: self.readScheduler)
+            .build()
+    }
+    lazy var setupClosure = { return self.store }
+    @objc func testOneToOnePerformance() {
+        self.oneToOne(self.setupClosure)
+    }
+    @objc func testOneToManyPerformance() {
+        self.oneToMany(self.setupClosure)
+    }
+    @objc func testManyToManyPerformance() {
+        self.manyToMany(self.setupClosure)
     }
 }

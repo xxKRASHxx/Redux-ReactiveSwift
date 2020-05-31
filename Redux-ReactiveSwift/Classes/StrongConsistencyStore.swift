@@ -111,4 +111,3 @@ public extension StrongConsistencyStore where State: Defaultable {
       readScheduler: readScheduler)
   }
 }
-

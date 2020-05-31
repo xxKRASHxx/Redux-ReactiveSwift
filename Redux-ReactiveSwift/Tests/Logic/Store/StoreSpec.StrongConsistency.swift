@@ -1,10 +1,11 @@
 //
-//  StoreSpec.swift
-//  Redux-ReactiveSwiftTests
+//  StoreSpec.StrongConsistency.swift
+//  CocoaPods-Redux-ReactiveSwift-iOSTests
 //
-//  Created by Petro Korienev on 10/15/17.
-//  Copyright © 2017 Petro Korienev. All rights reserved.
+//  Created by Petro Korienev on 6/1/20.
 //
+
+import Foundation
 
 import Quick
 import Nimble
@@ -13,24 +14,18 @@ import ReactiveSwift
 import Redux_ReactiveSwift
 import UIKit
 
-extension Int: Defaultable {
-    public static var defaultValue: Int {
-        return 0
-    }
-}
-
-class StoreSpec: QuickSpec {
-
+class StrongConsistencyStoreSpec: QuickSpec {
+    fileprivate typealias Helper = StoreSpecHelpers
     override func spec() {
         describe("Reducers processing") {
             context("single reducer") {
                 it("should call reducer on event") {
-                    let (store, reducer) = createStore(reducer: intReducer, initialValue: 0)
+                    let (store, reducer) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
                     store.consume(event: .increment)
                     expect(reducer.callCount).to(equal(1))
                 }
                 it("should call reducer once on each event") {
-                    let (store, reducer) = createStore(reducer: intReducer, initialValue: 0)
+                    let (store, reducer) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
@@ -38,14 +33,14 @@ class StoreSpec: QuickSpec {
                     expect(reducer.callCount).to(equal(4))
                 }
                 it("should fire signal on event") {
-                    let (store, _) = createStore(reducer: intReducer, initialValue: 0)
-                    let observer = observeValues(of: store, with: observeIntValues)
+                    let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
+                    let observer = Helper.observeValues(of: store, with: Helper.observeIntValues)
                     store.consume(event: .increment)
                     expect(observer.callCount).toEventually(equal(1), timeout: 0.1)
                 }
                 it("should fire signal on each event") {
-                    let (store, _) = createStore(reducer: intReducer, initialValue: 0)
-                    let observer = observeValues(of: store, with: observeIntValues)
+                    let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
+                    let observer = Helper.observeValues(of: store, with: Helper.observeIntValues)
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
@@ -55,13 +50,13 @@ class StoreSpec: QuickSpec {
             }
             context("multiple reducers") {
                 it("should call every reducer once on event") {
-                    let (store, reducer1, reducer2) = createStore(reducers: intReducer, intReducer, initialValue: 0)
+                    let (store, reducer1, reducer2) = Helper.createStrongConsistencyStore(reducers: Helper.intReducer, Helper.intReducer, initialValue: 0)
                     store.consume(event: .increment)
                     expect(reducer1.callCount).to(equal(1))
                     expect(reducer2.callCount).to(equal(1))
                 }
                 it("should call every reducer once on each event") {
-                    let (store, reducer1, reducer2) = createStore(reducers: intReducer, intReducer, initialValue: 0)
+                    let (store, reducer1, reducer2) = Helper.createStrongConsistencyStore(reducers: Helper.intReducer, Helper.intReducer, initialValue: 0)
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
@@ -70,14 +65,14 @@ class StoreSpec: QuickSpec {
                     expect(reducer2.callCount).to(equal(4))
                 }
                 it("should fire signal on event") {
-                    let store = createStore(reducers: [intReducer, intReducer, intReducer], initialValue: 0)
-                    let observer = observeValues(of: store, with: observeIntValues)
+                    let store = Helper.createStrongConsistencyStore(reducers: [Helper.intReducer, Helper.intReducer, Helper.intReducer], initialValue: 0)
+                    let observer = Helper.observeValues(of: store, with: Helper.observeIntValues)
                     store.consume(event: .increment)
                     expect(observer.callCount).toEventually(equal(1), timeout: 0.1)
                 }
                 it("should fire signal on each event") {
-                    let store = createStore(reducers: [intReducer, intReducer, intReducer], initialValue: 0)
-                    let observer = observeValues(of: store, with: observeIntValues)
+                    let store = Helper.createStrongConsistencyStore(reducers: [Helper.intReducer, Helper.intReducer, Helper.intReducer], initialValue: 0)
+                    let observer = Helper.observeValues(of: store, with: Helper.observeIntValues)
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
                     store.consume(event: .add(1))
@@ -90,35 +85,35 @@ class StoreSpec: QuickSpec {
             context("value") {
                 context("single reducer") {
                     it("should calculate value by reducer") {
-                        let (store, _) = createStore(reducer: intReducer, initialValue: 0)
+                        let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
                         store.consume(event: .increment)
                         expect(store.value)
-                            .toEventually(equal(intReducer(state: 0, event: .increment)), timeout: 0.1)
+                            .toEventually(equal(Helper.intReducer(state: 0, event: .increment)), timeout: 0.1)
                     }
                     it("should calculate values by reducer on each event") {
 
-                        let (store, _) = createStore(reducer: intReducer, initialValue: 0)
+                        let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
                         store.consume(event: .increment)
                         expect(store.value)
-                            .toEventually(equal(intReducer(state: 0, event: .increment)), timeout: 0.1)
+                            .toEventually(equal(Helper.intReducer(state: 0, event: .increment)), timeout: 0.1)
 
                         let state = store.value
                         store.consume(event: .decrement)
                         expect(store.value)
-                            .toEventually(equal(intReducer(state: state, event: .decrement)), timeout: 0.1)
+                            .toEventually(equal(Helper.intReducer(state: state, event: .decrement)), timeout: 0.1)
                     }
                 }
                 context("multiple reducers") {
-                    let reducers = [intReducer, intReducer, intReducer]
+                    let reducers = [Helper.intReducer, Helper.intReducer, Helper.intReducer]
                     it("should calculate value by reducer") {
-                        let store = createStore(reducers: reducers, initialValue: 0)
+                        let store = Helper.createStrongConsistencyStore(reducers: reducers, initialValue: 0)
                         store.consume(event: .increment)
                         let result = reducers.reduce(0, { state, reducer in reducer(state, .increment) })
                         expect(store.value)
                             .toEventually(equal(result), timeout: 0.1)
                     }
                     it("should calculate values by reducer on each event") {
-                        let store = createStore(reducers: reducers, initialValue: 0)
+                        let store = Helper.createStrongConsistencyStore(reducers: reducers, initialValue: 0)
                         store.consume(event: .increment)
                         let result = reducers.reduce(0, { state, reducer in reducer(state, .increment) })
                         expect(store.value)
@@ -134,8 +129,8 @@ class StoreSpec: QuickSpec {
             }
             context("signal producer") {
                 it("should produce valid sequence of values") {
-                    let (store, _) = createStore(reducer: intReducer, initialValue: 0)
-                    let observer = observeValuesViaProducer(of: store, with: observeIntValues)
+                    let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.intReducer, initialValue: 0)
+                    let observer = Helper.observeValuesViaProducer(of: store, with: Helper.observeIntValues)
 
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
@@ -152,28 +147,28 @@ class StoreSpec: QuickSpec {
             context("value") {
                 context("single reducer") {
                     it("should calculate value by reducer") {
-                        let (store, _) = createStore(reducer: nsNumberReducer, initialValue: initialState)
+                        let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.nsNumberReducer, initialValue: initialState)
                         store.consume(event: .increment)
                         expect(store.value)
-                            .toEventually(equal(nsNumberReducer(state: initialState, event: .increment)), timeout: 0.1)
+                            .toEventually(equal(Helper.nsNumberReducer(state: initialState, event: .increment)), timeout: 0.1)
                     }
                     it("should calculate values by reducer on each event") {
-                        let (store, _) = createStore(reducer: nsNumberReducer, initialValue: initialState)
+                        let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.nsNumberReducer, initialValue: initialState)
                         store.consume(event: .increment)
                         expect(store.value)
-                            .toEventually(equal(nsNumberReducer(state: initialState, event: .increment)), timeout: 0.1)
+                            .toEventually(equal(Helper.nsNumberReducer(state: initialState, event: .increment)), timeout: 0.1)
 
                         let state = store.value
                         store.consume(event: .decrement)
                         expect(store.value)
-                            .toEventually(equal(nsNumberReducer(state: state, event: .decrement)), timeout: 0.1)
+                            .toEventually(equal(Helper.nsNumberReducer(state: state, event: .decrement)), timeout: 0.1)
 
                     }
                 }
                 context("multiple reducers") {
-                    let reducers = [nsNumberReducer, nsNumberReducer, nsNumberReducer]
+                    let reducers = [Helper.nsNumberReducer, Helper.nsNumberReducer, Helper.nsNumberReducer]
                     it("should calculate value by reducer") {
-                        let store = createStore(reducers: reducers, initialValue: initialState)
+                        let store = Helper.createStrongConsistencyStore(reducers: reducers, initialValue: initialState)
                         store.consume(event: .increment)
                         let result = reducers.reduce(initialState, { state, reducer in reducer(state, .increment) })
                         expect(store.value)
@@ -181,7 +176,7 @@ class StoreSpec: QuickSpec {
                     }
 
                     it("should calculate values by reducer on each event") {
-                        let store = createStore(reducers: reducers, initialValue: initialState)
+                        let store = Helper.createStrongConsistencyStore(reducers: reducers, initialValue: initialState)
                         store.consume(event: .increment)
                         let result = reducers.reduce(initialState, { state, reducer in reducer(state, .increment) })
                         expect(store.value)
@@ -198,8 +193,8 @@ class StoreSpec: QuickSpec {
             context("signal producer") {
                 it("should produce valid sequence of values") {
 
-                    let (store, _) = createStore(reducer: nsNumberReducer, initialValue: initialState)
-                    let observer = observeValuesViaProducer(of: store, with: observeNumberValues)
+                    let (store, _) = Helper.createStrongConsistencyStore(reducer: Helper.nsNumberReducer, initialValue: initialState)
+                    let observer = Helper.observeValuesViaProducer(of: store, with: Helper.observeNumberValues)
 
                     store.consume(event: .increment)
                     store.consume(event: .decrement)
@@ -221,7 +216,7 @@ class StoreSpec: QuickSpec {
             context("signal producer") {
                 it("should initialize with default value") {
                     let store: Store<Int, ()> = Store(reducers: [])
-                    let observer = observeValuesViaProducer(of: store, with: observeIntValues)
+                    let observer = Helper.observeValuesViaProducer(of: store, with: Helper.observeIntValues)
                     expect((observer.arguments()[0] as! Int)).to(equal(Int.defaultValue))
                 }
             }
@@ -238,7 +233,7 @@ class StoreSpec: QuickSpec {
                     .collect(count: 5)
                     .startWithValues(callSpy.1)
 
-                let store = createStore(reducers: [stringReducer], initialValue: "Hello")
+                let store = Helper.createStrongConsistencyStore(reducers: [Helper.stringReducer], initialValue: "Hello")
                 label.reactive.text <~ store
                 store.consume(event: .increment)
                 store.consume(event: .decrement)
@@ -290,72 +285,4 @@ class StoreSpec: QuickSpec {
             }
         }
     }
-
 }
-
-// MARK: Helpers
-
-fileprivate enum IntegerArithmeticAction {
-    case increment
-    case decrement
-    case add(Int)
-    case subtract(Int)
-}
-
-private func createStore<State, Action>(reducer: @escaping (State, Action) -> State, initialValue: State) -> (Store<State, Action>, CallSpy) {
-    let callSpy = CallSpy.makeCallSpy(f2: reducer)
-    let store: Store<State,Action> = Store(state: initialValue, reducers: [callSpy.1])
-    return (store, callSpy.0)
-}
-
-private func createStore<State, Action>(reducers first: @escaping (State, Action) -> State, _ second: @escaping (State, Action) -> State, initialValue: State) -> (Store<State, Action>, CallSpy, CallSpy) {
-    let callSpy1 = CallSpy.makeCallSpy(f2: first)
-    let callSpy2 = CallSpy.makeCallSpy(f2: second)
-
-    let store: Store<State,Action> = Store(state: initialValue, reducers: [callSpy1.1, callSpy2.1])
-    return (store, callSpy1.0, callSpy2.0)
-}
-
-private func createStore<State, Action>(reducers: [(State, Action) -> State], initialValue: State) -> (Store<State, Action>) {
-    let store: Store<State,Action> = Store(state: initialValue, reducers: reducers)
-    return store
-}
-
-private func observeValues<State, Action>(of store: Store<State, Action>, with observer: @escaping (State) -> ()) -> CallSpy  {
-    let callSpy = CallSpy.makeCallSpy(f1: observer)
-    store.signal.observeValues(callSpy.1)
-    return callSpy.0
-}
-
-private func observeValuesViaProducer<State, Action>(of store: Store<State, Action>, with observer: @escaping (State) -> ()) -> CallSpy  {
-    let callSpy = CallSpy.makeCallSpy(f1: observer)
-    store.producer.startWithValues(callSpy.1)
-    return callSpy.0
-}
-
-private func intReducer(state: Int, event: IntegerArithmeticAction) -> Int {
-    switch event {
-    case .increment: return state + 1;
-    case .decrement: return state - 1;
-    case .add(let operand): return state + operand;
-    case .subtract(let operand): return state - operand;
-    }
-}
-private func nsNumberReducer(state: NSNumber, event: IntegerArithmeticAction) -> NSNumber {
-    switch event {
-    case .increment: return NSNumber(integerLiteral: state.intValue + 1);
-    case .decrement: return NSNumber(integerLiteral: state.intValue - 1);
-    case .add(let operand): return NSNumber(integerLiteral: state.intValue + operand);
-    case .subtract(let operand): return NSNumber(integerLiteral: state.intValue - operand);
-    }
-}
-private func stringReducer(state: String, event: IntegerArithmeticAction) -> String {
-    switch event {
-    case .increment: return state + "1";
-    case .decrement: return String(state.dropLast());
-    case .add(let operand): return state + (1...operand).map {"\($0)"}.joined(separator: "");
-    case .subtract(let operand): return String(state.dropLast(operand));
-    }
-}
-private func observeIntValues(values: Int) {}
-private func observeNumberValues(values: NSNumber) {}

@@ -22,6 +22,10 @@
 		4B33DA652484013D00EBA2A6 /* Defaultable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA5D2483EDC500EBA2A6 /* Defaultable.swift */; };
 		4B33DA662484013E00EBA2A6 /* Defaultable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA5D2483EDC500EBA2A6 /* Defaultable.swift */; };
 		4B33DA672484013E00EBA2A6 /* Defaultable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA5D2483EDC500EBA2A6 /* Defaultable.swift */; };
+		4B33DA6E2484510200EBA2A6 /* StoreSpec.Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA6D2484510200EBA2A6 /* StoreSpec.Helpers.swift */; };
+		4B33DA70248453B400EBA2A6 /* StoreSpec.StrongConsistency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA6F248453B400EBA2A6 /* StoreSpec.StrongConsistency.swift */; };
+		4B33DA742484574C00EBA2A6 /* SyncSpec.StrongConsistency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA732484574C00EBA2A6 /* SyncSpec.StrongConsistency.swift */; };
+		4B33DA79248457E300EBA2A6 /* SyncSpec.Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33DA78248457E300EBA2A6 /* SyncSpec.Helpers.swift */; };
 		4B4513D52480F730009EE471 /* PerformanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4513D42480F730009EE471 /* PerformanceTest.swift */; };
 		4B4513D7248121F7009EE471 /* XCTPerformanceMetric+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4513D6248121F7009EE471 /* XCTPerformanceMetric+Extension.swift */; };
 		4BBF000A1FFAE2D800FA8377 /* StoreBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */; };
@@ -85,6 +89,10 @@
 		4B33DA592483CE7C00EBA2A6 /* StoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreProtocol.swift; sourceTree = "<group>"; };
 		4B33DA5B2483ED7800EBA2A6 /* StrongConsistencyStore.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = StrongConsistencyStore.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4B33DA5D2483EDC500EBA2A6 /* Defaultable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaultable.swift; sourceTree = "<group>"; };
+		4B33DA6D2484510200EBA2A6 /* StoreSpec.Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSpec.Helpers.swift; sourceTree = "<group>"; };
+		4B33DA6F248453B400EBA2A6 /* StoreSpec.StrongConsistency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSpec.StrongConsistency.swift; sourceTree = "<group>"; };
+		4B33DA732484574C00EBA2A6 /* SyncSpec.StrongConsistency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSpec.StrongConsistency.swift; sourceTree = "<group>"; };
+		4B33DA78248457E300EBA2A6 /* SyncSpec.Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSpec.Helpers.swift; sourceTree = "<group>"; };
 		4B4513D42480F730009EE471 /* PerformanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTest.swift; sourceTree = "<group>"; };
 		4B4513D6248121F7009EE471 /* XCTPerformanceMetric+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTPerformanceMetric+Extension.swift"; sourceTree = "<group>"; };
 		4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreBuilderSpec.swift; sourceTree = "<group>"; };
@@ -211,6 +219,61 @@
 			path = Middlewares;
 			sourceTree = "<group>";
 		};
+		4B33DA6C248450A000EBA2A6 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				4B33DA75248457BB00EBA2A6 /* Builder */,
+				4B33DA76248457C600EBA2A6 /* Store */,
+				4B33DA77248457CE00EBA2A6 /* Sync */,
+			);
+			path = Logic;
+			sourceTree = "<group>";
+		};
+		4B33DA712484571700EBA2A6 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				4B4513D42480F730009EE471 /* PerformanceTest.swift */,
+			);
+			path = Performance;
+			sourceTree = "<group>";
+		};
+		4B33DA722484572600EBA2A6 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				4B4513D6248121F7009EE471 /* XCTPerformanceMetric+Extension.swift */,
+				4BD3B39C1F9695B80077E8A5 /* CallSpy.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		4B33DA75248457BB00EBA2A6 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		4B33DA76248457C600EBA2A6 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				4B33DA6D2484510200EBA2A6 /* StoreSpec.Helpers.swift */,
+				4BD3B39E1F9695B80077E8A5 /* StoreSpec.swift */,
+				4B33DA6F248453B400EBA2A6 /* StoreSpec.StrongConsistency.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		4B33DA77248457CE00EBA2A6 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				0E526670241A9D0300923B83 /* SyncSpec.swift */,
+				4B33DA78248457E300EBA2A6 /* SyncSpec.Helpers.swift */,
+				4B33DA732484574C00EBA2A6 /* SyncSpec.StrongConsistency.swift */,
+			);
+			path = Sync;
+			sourceTree = "<group>";
+		};
 		4BD3B3481F9690810077E8A5 = {
 			isa = PBXGroup;
 			children = (
@@ -301,12 +364,9 @@
 		4BD3B39B1F9695B80077E8A5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				4B4513D6248121F7009EE471 /* XCTPerformanceMetric+Extension.swift */,
-				4BD3B39C1F9695B80077E8A5 /* CallSpy.swift */,
-				4BD3B39E1F9695B80077E8A5 /* StoreSpec.swift */,
-				0E526670241A9D0300923B83 /* SyncSpec.swift */,
-				4B4513D42480F730009EE471 /* PerformanceTest.swift */,
-				4BBF00091FFAE2D800FA8377 /* StoreBuilderSpec.swift */,
+				4B33DA722484572600EBA2A6 /* Utils */,
+				4B33DA6C248450A000EBA2A6 /* Logic */,
+				4B33DA712484571700EBA2A6 /* Performance */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -811,8 +871,12 @@
 			files = (
 				4BD3B39F1F9695BF0077E8A5 /* CallSpy.swift in Sources */,
 				4BD3B3A01F9695C20077E8A5 /* StoreSpec.swift in Sources */,
+				4B33DA79248457E300EBA2A6 /* SyncSpec.Helpers.swift in Sources */,
+				4B33DA6E2484510200EBA2A6 /* StoreSpec.Helpers.swift in Sources */,
+				4B33DA70248453B400EBA2A6 /* StoreSpec.StrongConsistency.swift in Sources */,
 				0E526671241A9D0300923B83 /* SyncSpec.swift in Sources */,
 				4B4513D52480F730009EE471 /* PerformanceTest.swift in Sources */,
+				4B33DA742484574C00EBA2A6 /* SyncSpec.StrongConsistency.swift in Sources */,
 				4B4513D7248121F7009EE471 /* XCTPerformanceMetric+Extension.swift in Sources */,
 				4BBF000A1FFAE2D800FA8377 /* StoreBuilderSpec.swift in Sources */,
 			);

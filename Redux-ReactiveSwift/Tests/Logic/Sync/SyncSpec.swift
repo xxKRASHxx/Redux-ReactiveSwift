@@ -5,37 +5,18 @@ import ReactiveCocoa
 import ReactiveSwift
 import Redux_ReactiveSwift
 
-extension SyncSpec {
-  struct AppState: Defaultable, Equatable {
-    let some: SomeState; struct SomeState: Equatable {
-      let int: Int
-    }
-    static var defaultValue = AppState(some: .init(int: 0))
-  }
-  
-  enum AppEvent {
-    case some
-  }
-  
-  static func appReducer(state: AppState, event: AppEvent) -> AppState {
-    .init(
-      some: .init(int: state.some.int + 1)
-    )
-  }
-}
-
 class SyncSpec: QuickSpec {
-  
-  var store: Store<AppState, AppEvent>!
+  fileprivate typealias Helper = SyncSpecHelpers
+  fileprivate var store: Store<Helper.AppState, Helper.AppEvent>!
   
   override func spec() {
     
     describe("Testing sync:") {
       
       beforeEach {
-        self.store = StoreBuilder<AppState, AppEvent, Store<AppState, AppEvent>>()
+        self.store = StoreBuilder<Helper.AppState, Helper.AppEvent, Store<Helper.AppState, Helper.AppEvent>>()
           .dispatcher(scheduler: QueueScheduler.main)
-          .reducer(SyncSpec.appReducer)
+          .reducer(Helper.appReducer)
           .build()
       }
       

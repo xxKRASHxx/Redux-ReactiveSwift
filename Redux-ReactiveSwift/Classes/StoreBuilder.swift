@@ -22,11 +22,6 @@ where StoreType.State == StateType, StoreType.Event == EventType {
     public func build() -> StoreType {
         return StoreType.init(state: initialState, reducers: reducers, readScheduler: readScheduler).applyMiddlewares(middlewares)
     }
-    
-    public func verboseBuild()
-        -> (store: StoreType, middlewares: [StoreMiddleware], reducers: [StoreType.Reducer]) {
-        return (store: build(), middlewares: middlewares, reducers: reducers)
-    }
 }
 
 public extension StoreBuilder where StateType: Defaultable {

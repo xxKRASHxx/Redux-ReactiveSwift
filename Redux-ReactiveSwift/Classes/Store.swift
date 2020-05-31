@@ -13,12 +13,8 @@ public protocol Defaultable {
   static var defaultValue: Self { get }
 }
 
-infix operator <~ : BindingPrecedence
+open class Store<State, Event>: StoreProtocol {
 
-open class Store<State, Event> {
-  
-  public typealias Reducer = (State, Event) -> State
-  
   fileprivate var innerProperty: MutableProperty<State>
   fileprivate var reducers: [Reducer]
   fileprivate var middlewares: [StoreMiddleware] = []
@@ -27,6 +23,10 @@ open class Store<State, Event> {
   fileprivate var _state: State
   fileprivate var _producer: SignalProducer<State, Never> = .empty
   fileprivate var _signal: Signal<State, Never> = .empty
+  
+  public var lifetime: Lifetime {
+    return innerProperty.lifetime
+  }
   
   public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler = .main) {    
     self.innerProperty = MutableProperty<State>(state)
@@ -94,17 +94,6 @@ extension Store: PropertyProtocol {
   }
   public var signal: Signal<State, Never> {
     return _signal
-  }
-}
-
-public extension Store {
-  @discardableResult
-  static func <~ <Source: BindingSource> (target: Store<State, Event>, source: Source) -> Disposable?
-    where Event == Source.Value
-  {
-    return source.producer
-      .take(during: target.innerProperty.lifetime)
-      .startWithValues(target.consume)
   }
 }
 

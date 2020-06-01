@@ -82,53 +82,72 @@ class QuadraticTime: BasePerformanceTest {}
 extension ConstantTime {
     func oneToOne<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
         where S.State == Int, S.Event == Int, S.Value == Int {
-        testPerformance(setupClosure: setupClosure) { (store) in
-            let exp = self.expectation(description: "Wait for store to synchronize")
-            store.producer.startWithValues { (value) in
-                if value == Const.writeSum {
-                    exp.fulfill()
+            testPerformance(setupClosure: setupClosure) { (store) in
+                let exp = self.expectation(description: "Wait for store to synchronize")
+                store.producer.startWithValues { (value) in
+                    if value == Const.writeSum {
+                        exp.fulfill()
+                    }
+                }
+                writeQueue.async {
+                    for i in 0 ..< Const.writeCount {
+                        store.consume(event: i)
+                    }
                 }
             }
-            writeQueue.async {
-                for i in 0 ..< Const.writeCount {
-                    store.consume(event: i)
-                }
-            }
-        }
     }
     
     func oneToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
         where S.State == Int, S.Event == Int, S.Value == Int {
-        testPerformance(setupClosure: setupClosure) { (store) in
-            for _ in 0 ..< Const.readMultiplicator {
-                let exp = self.expectation(description: "Wait for store to synchronize")
-                store.producer.startWithValues { (value) in
-                    if value == Const.writeSum { exp.fulfill() }
+            testPerformance(setupClosure: setupClosure) { (store) in
+                for _ in 0 ..< Const.readMultiplicator {
+                    let exp = self.expectation(description: "Wait for store to synchronize")
+                    store.producer.startWithValues { (value) in
+                        if value == Const.writeSum { exp.fulfill() }
+                    }
+                }
+                writeQueue.async {
+                    for i in 0 ..< Const.writeCount {
+                        store.consume(event: i)
+                    }
                 }
             }
-            writeQueue.async {
-                for i in 0 ..< Const.writeCount {
-                    store.consume(event: i)
-                }
-            }
-        }
     }
     
     func manyToMany<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
         where S.State == Int, S.Event == Int, S.Value == Int {
-        testMultiplePerformance(setupClosure: { (0 ..< $0).map { _ in setupClosure() } }) { (stores) in
-            for _ in 0 ..< Const.toManyReadMultiplicator {
-                let exp = self.expectation(description: "Wait for store to synchronize")
-                SignalProducer.zip( stores.map { $0.producer }).startWithValues { (value) in
-                    if value.reduce(0, +) == Const.toManySum { exp.fulfill() }
+            testMultiplePerformance(setupClosure: { (0 ..< $0).map { _ in setupClosure() } }) { (stores) in
+                for _ in 0 ..< Const.toManyReadMultiplicator {
+                    let exp = self.expectation(description: "Wait for store to synchronize")
+                    SignalProducer.zip( stores.map { $0.producer }).startWithValues { (value) in
+                        if value.reduce(0, +) == Const.toManySum { exp.fulfill() }
+                    }
+                }
+                writeQueue.async {
+                    for i in 0 ..< Const.writeCount {
+                        stores.forEach { $0.consume(event: i) }
+                    }
                 }
             }
-            writeQueue.async {
-                for i in 0 ..< Const.writeCount {
-                    stores.forEach { $0.consume(event: i) }
+    }
+    
+    func lockIntensiveOperation<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == Int, S.Event == Int, S.Value == Int {
+            testPerformance(setupClosure: setupClosure) { (store) in
+                for _ in 0 ..< Const.readMultiplicator {
+                    let exp = self.expectation(description: "Wait for store to synchronize")
+                    var accumulator: Int = 0
+                    store.producer.startWithValues { value in
+                        accumulator = accumulator + store.value // Intensionally accessing store.value here to check locking behavior
+                        if value == Const.writeSum { exp.fulfill() }
+                    }
+                }
+                writeQueue.async {
+                    for i in 0 ..< Const.writeCount {
+                        store.consume(event: i)
+                    }
                 }
             }
-        }
     }
 }
 
@@ -183,6 +202,25 @@ extension LinearTime {
             }
         }
     }
+    
+    func lockIntensiveOperation<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == [Int], S.Event == Int, S.Value == [Int] {
+            testPerformance(setupClosure: setupClosure) { (store) in
+                for _ in 0 ..< Const.readMultiplicator {
+                    let exp = self.expectation(description: "Wait for store to synchronize")
+                    var accumulator: Int = 0
+                    store.producer.startWithValues { value in
+                        accumulator = accumulator + (store.value.last ?? 0) // Intensionally accessing store.value here to check locking behavior
+                        if value.count == Const.writeCount { exp.fulfill() }
+                    }
+                }
+                writeQueue.async {
+                    for i in 0 ..< Const.writeCount {
+                        store.consume(event: i)
+                    }
+                }
+            }
+    }
 }
 
 // MARK: – Testing pattern for quadratic time. Can be applied to concrete store classes
@@ -199,6 +237,7 @@ extension QuadraticTime {
         }
         static var defaultValue: State = .init(data: [])
     }
+    
     func oneToOne<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
         where S.State == State, S.Event == Int, S.Value == State {
         testPerformance(setupClosure: setupClosure) { (store) in
@@ -248,6 +287,25 @@ extension QuadraticTime {
             }
         }
     }
+    
+    func lockIntensiveOperation<S: StoreProtocol & PropertyProtocol>(_ setupClosure: @escaping () -> S)
+        where S.State == State, S.Event == Int, S.Value == State {
+            testPerformance(setupClosure: setupClosure) { (store) in
+                for _ in 0 ..< Const.readMultiplicator {
+                    let exp = self.expectation(description: "Wait for store to synchronize")
+                    var accumulator: Int = 0
+                    store.producer.startWithValues { value in
+                        accumulator = accumulator + (store.value.data.last?.data.last ?? 0) // Intensionally accessing store.value here to check locking behavior
+                        if value.data.count == Const.writeCount { exp.fulfill() }
+                    }
+                }
+                writeQueue.async {
+                    for i in 0 ..< Const.writeCount {
+                        store.consume(event: i)
+                    }
+                }
+            }
+    }
 }
 
 // MARK: - Concrete test class for eventual consistency store constant time
@@ -267,6 +325,9 @@ class ConstantTimeEventualConsistency: ConstantTime, StoreProviderProtocol {
     }
     @objc func testManyToManyPerformance() {
         self.manyToMany(self.setupClosure)
+    }
+    @objc func testLockIntensivePerformance() {
+        self.lockIntensiveOperation(self.setupClosure)
     }
 }
 
@@ -288,6 +349,9 @@ class ConstantTimeStrongConsistency: ConstantTime, StoreProviderProtocol {
     @objc func testManyToManyPerformance() {
         self.manyToMany(self.setupClosure)
     }
+    @objc func testLockIntensivePerformance() {
+        self.lockIntensiveOperation(self.setupClosure)
+    }
 }
 
 // MARK: - Concrete test class for eventual consistency store linear time
@@ -307,6 +371,9 @@ class LinearTimeEventualConsistency: LinearTime, StoreProviderProtocol {
     }
     @objc func testManyToManyPerformance() {
         self.manyToMany(self.setupClosure)
+    }
+    @objc func testLockIntensivePerformance() {
+        self.lockIntensiveOperation(self.setupClosure)
     }
 }
 
@@ -328,6 +395,9 @@ class LinearTimeStrongConsistency: LinearTime, StoreProviderProtocol {
     @objc func testManyToManyPerformance() {
         self.manyToMany(self.setupClosure)
     }
+    @objc func testLockIntensivePerformance() {
+        self.lockIntensiveOperation(self.setupClosure)
+    }
 }
 
 // MARK: - Concrete test class for eventual consistency store quadratic time
@@ -348,6 +418,9 @@ class QuadraticTimeEventualConsistency: QuadraticTime, StoreProviderProtocol {
     @objc func testManyToManyPerformance() {
         self.manyToMany(self.setupClosure)
     }
+    @objc func testLockIntensivePerformance() {
+        self.lockIntensiveOperation(self.setupClosure)
+    }
 }
 
 // MARK: - Concrete test class for strong consistency store quadratic time
@@ -367,5 +440,8 @@ class QuadraticTimeStrongConsistency: QuadraticTime, StoreProviderProtocol {
     }
     @objc func testManyToManyPerformance() {
         self.manyToMany(self.setupClosure)
+    }
+    @objc func testLockIntensivePerformance() {
+        self.lockIntensiveOperation(self.setupClosure)
     }
 }

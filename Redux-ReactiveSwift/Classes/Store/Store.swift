@@ -35,10 +35,6 @@ open class Store<State, Event>: StoreProtocol {
       observer.send(value: self._state)
       lifetime += self._signal.observe(observer)
     }
-
-    innerProperty.signal
-      .observe(on: readScheduler)
-      .observeValues { self._state = $0 }
   }
   
   public func applyMiddlewares(_ middlewares: [StoreMiddleware]) -> Self {
@@ -65,7 +61,9 @@ open class Store<State, Event>: StoreProtocol {
   }
   
   public func undecoratedConsume(event: Event) {
-    innerProperty.value = reducers.reduce(self.innerProperty.value) { $1($0, event) }
+    let newState = reducers.reduce(self.innerProperty.value) { $1($0, event) }
+    innerProperty.value = newState
+    readScheduler.schedule { self._state = newState }
   }
   
   private func register(middleware: StoreMiddleware) {

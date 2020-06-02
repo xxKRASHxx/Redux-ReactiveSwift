@@ -62,8 +62,8 @@ open class Store<State, Event>: StoreProtocol {
   
   public func undecoratedConsume(event: Event) {
     let newState = reducers.reduce(self.innerProperty.value) { $1($0, event) }
-    innerProperty.value = newState
     readScheduler.schedule { self._state = newState }
+    innerProperty.value = newState
   }
   
   private func register(middleware: StoreMiddleware) {
@@ -72,7 +72,7 @@ open class Store<State, Event>: StoreProtocol {
       guard let safeValue = value as? State else {
         fatalError("Store got \(value) from unsafeValue() signal which is not of \(String(describing:State.self)) type")
       }
-
+      self?.readScheduler.schedule { self?._state = safeValue }
       self?.innerProperty.value = safeValue
     }
   }

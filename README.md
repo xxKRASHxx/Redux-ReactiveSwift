@@ -121,10 +121,17 @@ pod 'Redux-ReactiveSwift'
 ```
 
 Redux-ReactiveSwift is available through [Carthage](https://github.com/Carthage/Carthage). To install
-it, simply add the following line to your Podfile:
+it, simply add the following line to your Cartfile:
 
 ```ruby
 github "soxjke/Redux-ReactiveSwift"
+```
+
+Redux-ReactiveSwift is available through [SPM](https://swift.org/package-manager/). To install
+it, simply add the following line to your Package.swift fi;e:
+
+```ruby
+.Package(url: "https://github.com/soxjke/Redux-ReactiveSwift.git", upToNextMajor: 1.0.0)
 ```
 
 ## Author

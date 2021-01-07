@@ -8,24 +8,19 @@
 import Foundation
 import ReactiveSwift
 
-open class StoreBuilder<StateType, EventType, StoreType: Store<StateType, EventType>> {
-    
+open class StoreBuilder<StateType, EventType, StoreType: StoreProtocol>
+where StoreType.State == StateType, StoreType.Event == EventType {
     fileprivate var initialState: StateType
-    fileprivate var reducers: [StoreType.Reducer] = []
+    fileprivate var reducers: [Reducer<StateType, EventType>] = []
     fileprivate var middlewares: [StoreMiddleware] = []
-    fileprivate var readScheduler: QueueScheduler?
+    fileprivate var readScheduler: QueueScheduler = .main
     
     public init(state: StateType) {
         initialState = state
     }
     
     public func build() -> StoreType {
-        return StoreType(state: initialState, reducers: reducers, readScheduler: readScheduler).applyMiddlewares(middlewares)
-    }
-    
-    public func verboseBuild()
-        -> (store: StoreType, middlewares: [StoreMiddleware], reducers: [StoreType.Reducer]) {
-        return (store: build(), middlewares: middlewares, reducers: reducers)
+        return StoreType.init(state: initialState, reducers: reducers, readScheduler: readScheduler).applyMiddlewares(middlewares)
     }
 }
 
@@ -46,7 +41,7 @@ public extension MiddlewareBuilder {
 
 typealias ReducerBuilder = StoreBuilder
 public extension ReducerBuilder {
-    func reducer(_ reducer: @escaping (StateType, EventType) -> (StateType)) -> Self {
+    func reducer(_ reducer: @escaping Reducer<StateType, EventType>) -> Self {
         reducers.append(reducer); return self
     }
 }

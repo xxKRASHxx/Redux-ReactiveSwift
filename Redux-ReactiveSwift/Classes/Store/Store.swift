@@ -9,26 +9,32 @@
 import Foundation
 import ReactiveSwift
 
-public protocol Defaultable {
-  static var defaultValue: Self { get }
-}
-
-infix operator <~ : BindingPrecedence
-
-open class Store<State, Event> {
-  
-  public typealias Reducer = (State, Event) -> State
-  
+open class Store<State, Event>: StoreProtocol {
   fileprivate var innerProperty: MutableProperty<State>
-  fileprivate var reducers: [Reducer]
+  fileprivate var reducers: [Reducer<State, Event>]
   fileprivate var middlewares: [StoreMiddleware] = []
   fileprivate let readScheduler: QueueScheduler
   
-  public required init(state: State, reducers: [Reducer], readScheduler: QueueScheduler? = nil) {
+  fileprivate var _state: State
+  fileprivate var _producer: SignalProducer<State, Never> = .empty
+  fileprivate var _signal: Signal<State, Never> = .empty
+  
+  public var lifetime: Lifetime {
+    return innerProperty.lifetime
+  }
+  
+  public required init(state: State, reducers: [Reducer<State, Event>], readScheduler: QueueScheduler = .main) {
     self.innerProperty = MutableProperty<State>(state)
-    self.readScheduler = readScheduler ?? .main
+    self.readScheduler = readScheduler
     self.reducers = reducers
-    readScheduler?.queue.recursiveSyncEnabled = true
+    
+    self._state = state
+    self._signal = innerProperty.signal.observe(on: readScheduler)
+    self._producer = SignalProducer<State, Never> { [weak self] observer, lifetime in
+      guard let self = self else { return observer.sendCompleted() }
+      observer.send(value: self._state)
+      lifetime += self._signal.observe(observer)
+    }
   }
   
   public func applyMiddlewares(_ middlewares: [StoreMiddleware]) -> Self {
@@ -55,7 +61,9 @@ open class Store<State, Event> {
   }
   
   public func undecoratedConsume(event: Event) {
-    innerProperty.value = reducers.reduce(self.innerProperty.value) { $1($0, event) }
+    let newState = reducers.reduce(self.innerProperty.value) { $1($0, event) }
+    readScheduler.schedule { self._state = newState }
+    innerProperty.value = newState
   }
   
   private func register(middleware: StoreMiddleware) {
@@ -64,7 +72,7 @@ open class Store<State, Event> {
       guard let safeValue = value as? State else {
         fatalError("Store got \(value) from unsafeValue() signal which is not of \(String(describing:State.self)) type")
       }
-      
+      self?.readScheduler.schedule { self?._state = safeValue }
       self?.innerProperty.value = safeValue
     }
   }
@@ -72,35 +80,18 @@ open class Store<State, Event> {
 
 extension Store: PropertyProtocol {
   public var value: State {
-    readScheduler.queue.recursiveSync { innerProperty.value }
+    return self._state
   }
-  
   public var producer: SignalProducer<State, Never> {
-    SignalProducer<State, Never> { [weak self] observer, lifetime in
-      guard let self = self else { return observer.sendCompleted() }
-      observer.send(value: self.value)
-      lifetime += self.signal.observe(observer)
-    }
+    return _producer
   }
-  
   public var signal: Signal<State, Never> {
-    innerProperty.signal.observe(on: readScheduler)
-  }
-}
-
-public extension Store {
-  @discardableResult
-  static func <~ <Source: BindingSource> (target: Store<State, Event>, source: Source) -> Disposable?
-    where Event == Source.Value
-  {
-    return source.producer
-      .take(during: target.innerProperty.lifetime)
-      .startWithValues(target.consume)
+    return _signal
   }
 }
 
 public extension Store where State: Defaultable {
-  convenience init(reducers: [Reducer], readScheduler: QueueScheduler? = nil) {
+    convenience init(reducers: [Reducer<State, Event>], readScheduler: QueueScheduler = .main) {
     self.init(
       state: State.defaultValue,
       reducers: reducers,

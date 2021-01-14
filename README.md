@@ -16,7 +16,7 @@ This library focuses on predictable state container implementation inspired by [
 The basic usage is pretty straightforward - one can create a store with `State` and reducer('s) of type `(State, Event) -> State`
 
 ```swift
-import Redux_ReactiveSwift
+import ReduxReactiveSwift
 
 class ViewModel {
     enum ButtonAction {

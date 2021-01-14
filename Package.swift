@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-  name: "Redux_ReactiveSwift",
+  name: "ReduxReactiveSwift",
   platforms: [
     .macOS(.v10_10), .iOS(.v9), .tvOS(.v9), .watchOS(.v2)
   ],
   products: [
-    .library(name: "Redux_ReactiveSwift", targets: ["Redux_ReactiveSwift"])
+    .library(name: "ReduxReactiveSwift", targets: ["ReduxReactiveSwift"])
   ],
   dependencies: [
     .package(
@@ -20,7 +20,7 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "Redux_ReactiveSwift",
+      name: "ReduxReactiveSwift",
       dependencies: ["ReactiveSwift"],
       path: "Redux-ReactiveSwift/Classes"
     )
